@@ -18,11 +18,13 @@ export default function SectionContent() {
 	const [value, setValue] = useState("");
 	const [opened, setOpened] = useState(false);
 
-	const localDate = new Date().toLocaleDateString("es-ES", {
-		year: "numeric",
-		month: "2-digit",
-		day: "2-digit",
-	});
+	const localDate = new Date();
+	const formatDate = (date) => {
+		const day = date.getDate();
+		const month = date.getMonth() + 1;
+		const year = date.getFullYear();
+		return `${year}${month}${day}`;
+	};
 
 	const productsPerPage = 50;
 	const pageCount = Math.ceil(csvData.length / productsPerPage);
@@ -107,7 +109,10 @@ export default function SectionContent() {
 														.filter((data) => data.NUMERO_ORDEN === item)
 														.map((data) => Object.values(data).join("\t"))
 														.join("\n");
-													zip.file(`${item}.txt`, `${headers}\n${data}`);
+													const blob = new Blob([headers + "\n" + data], {
+														type: "text/plain;charset=utf-8",
+													});
+													zip.file(`reporte_${item}.txt`, blob);
 												});
 												zip.generateAsync({ type: "blob" }).then((content) => {
 													saveAs(content, `reporte_${localDate}.zip`);
@@ -153,11 +158,20 @@ export default function SectionContent() {
 														.filter((data) => data.NUMERO_ORDEN === item)
 														.map((data) => Object.values(data).join("\t"))
 														.join("\n");
-													zip.file(`${item}.txt`, headers + "\n" + data);
+													const blob = new Blob([headers + "\n" + data], {
+														type: "text/plain;charset=utf-8",
+													});
+													zip.file(
+														`ROC_3215_${formatDate(localDate)}_${item}.txt`,
+														blob,
+													);
 												});
 
 												zip.generateAsync({ type: "blob" }).then((content) => {
-													saveAs(content, `reporte_${localDate}.zip`);
+													saveAs(
+														content,
+														`reporte_${formatDate(localDate)}.zip`,
+													);
 												});
 											}
 										}}

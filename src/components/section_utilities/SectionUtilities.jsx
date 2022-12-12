@@ -16,7 +16,6 @@ export default function SectionUtilities() {
 	const { csvData, setCsvData } = useContext(CsvDataContext);
 
 	const localDate = new Date();
-	//format date like 28-11-2022
 	const formatDate = (date) => {
 		const day = date.getDate();
 		const month = date.getMonth() + 1;
@@ -102,7 +101,10 @@ export default function SectionUtilities() {
 										const a = document.createElement("a");
 										a.setAttribute("hidden", "");
 										a.setAttribute("href", url);
-										a.setAttribute("download", `reporte-${formatDate}.txt`);
+										a.setAttribute(
+											"download",
+											`reporte-general-${formatDate(localDate)}.txt`,
+										);
 										document.body.appendChild(a);
 										a.click();
 										document.body.removeChild(a);
