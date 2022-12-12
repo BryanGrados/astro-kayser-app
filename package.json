@@ -1,6 +1,6 @@
 {
   "name": "@example/basics",
-  "homepage": "https://kaysercontigo.pe",
+  "homepage": ".",
   "type": "module",
   "version": "0.0.1",
   "private": true,
