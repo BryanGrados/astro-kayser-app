@@ -8,6 +8,8 @@ import { saveAs } from "file-saver";
 import { AnimatePresence, motion } from "framer-motion";
 import JSZip, { forEach } from "jszip";
 import React, { useContext, useState } from "react";
+import { showNotification } from "@mantine/notifications";
+import { IconFaceIdError } from "@tabler/icons";
 
 export default function SectionContent() {
 	const { csvData, setCsvData } = useContext(CsvDataContext);
@@ -96,28 +98,40 @@ export default function SectionContent() {
 										whileTap={{ scale: 0.9 }}
 										className="px-4 py-2 text-white bg-[#374aee] rounded-md shadow-md"
 										onClick={() => {
-											const headers = Object.keys(csvData[0]).join("\t");
-											if (value.length >= 2) {
-												const zip = new JSZip();
-												value.forEach((item) => {
+											if (value !== null) {
+												if (value.length === 0 || value === null) {
+													showNotification({
+														title: "No hay datos para descargar",
+														message: "Por favor, seleccione un Nro. de Orden",
+														autoClose: 2000,
+														color: "red",
+														icon: <IconFaceIdError />,
+													});
+												} else if (value.length >= 2) {
+													const headers = Object.keys(csvData[0]).join("\t");
+													const zip = new JSZip();
+													value.forEach((item) => {
+														const data = csvData
+															.filter((data) => data.NUMERO_ORDEN === item)
+															.map((data) => Object.values(data).join("\t"))
+															.join("\n");
+														zip.file(`${item}_${localDate}.txt`);
+													});
+													zip
+														.generateAsync({ type: "blob" })
+														.then((content) => {
+															saveAs(content, `reporte_${localDate}.zip`);
+														});
+												} else {
 													const data = csvData
-														.filter((data) => data.NUMERO_ORDEN === item)
+														.filter((data) => data.NUMERO_ORDEN === value[0])
 														.map((data) => Object.values(data).join("\t"))
 														.join("\n");
-													zip.file(`${item}_${localDate}.txt`);
-												});
-												zip.generateAsync({ type: "blob" }).then((content) => {
-													saveAs(content, `reporte_${localDate}.zip`);
-												});
-											} else {
-												const data = csvData
-													.filter((data) => data.NUMERO_ORDEN === value[0])
-													.map((data) => Object.values(data).join("\t"))
-													.join("\n");
-												const blob = new Blob([headers + "\n" + data], {
-													type: "text/plain;charset=utf-8",
-												});
-												saveAs(blob, `${value[0]}_${localDate}.txt`);
+													const blob = new Blob([headers + "\n" + data], {
+														type: "text/plain;charset=utf-8",
+													});
+													saveAs(blob, `${value[0]}_${localDate}.txt`);
+												}
 											}
 										}}
 									>
@@ -131,34 +145,32 @@ export default function SectionContent() {
 										whileTap={{ scale: 0.9 }}
 										className="px-4 py-2 text-white bg-[#374aee] rounded-md shadow-md"
 										onClick={() => {
-											console.log([...data]);
+											if (csvData.length === 0) {
+												showNotification({
+													title: "No hay datos para descargar",
+													message: "Por favor, suba un archivo CSV",
+													autoClose: 2000,
+													color: "red",
+													icon: <IconFaceIdError />,
+												});
+											} else {
+												const zip = new JSZip();
+												const headers = Object.keys(csvData[0]).join("\t");
 
-											const zip = new JSZip();
-											const headers = Object.keys(csvData[0]).join("\t");
+												const values = [...data].map((item) => item.value);
 
-											//get all values from [...data]
+												values.forEach((item) => {
+													const data = csvData
+														.filter((data) => data.NUMERO_ORDEN === item)
+														.map((data) => Object.values(data).join("\t"))
+														.join("\n");
+													zip.file(`${item}.txt`, headers + "\n" + data);
+												});
 
-											const values = [...data].map((item) => item.value);
-
-											values.forEach((item) => {
-												// 	const data = csvData
-												// 		.filter((data) => data.NUMERO_ORDEN === item)
-												// 		.map((data) => Object.values(data).join("\t"))
-												// 		.join("\n");
-												// 	zip.file(`${item}.txt`, headers + "\n" + data);
-												// });
-												//this is generating a empty txt at the end of the zip file, remove it
-
-												const data = csvData
-													.filter((data) => data.NUMERO_ORDEN === item)
-													.map((data) => Object.values(data).join("\t"))
-													.join("\n");
-												zip.file(`${item}.txt`, headers + "\n" + data);
-											});
-
-											zip.generateAsync({ type: "blob" }).then((content) => {
-												saveAs(content, `reporte_${localDate}.zip`);
-											});
+												zip.generateAsync({ type: "blob" }).then((content) => {
+													saveAs(content, `reporte_${localDate}.zip`);
+												});
+											}
 										}}
 									>
 										<Texts
