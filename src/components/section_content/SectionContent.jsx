@@ -98,40 +98,29 @@ export default function SectionContent() {
 										whileTap={{ scale: 0.9 }}
 										className="px-4 py-2 text-white bg-[#374aee] rounded-md shadow-md"
 										onClick={() => {
-											if (value !== null) {
-												if (value.length === 0 || value === null) {
-													showNotification({
-														title: "No hay datos para descargar",
-														message: "Por favor, seleccione un Nro. de Orden",
-														autoClose: 2000,
-														color: "red",
-														icon: <IconFaceIdError />,
-													});
-												} else if (value.length >= 2) {
-													const headers = Object.keys(csvData[0]).join("\t");
-													const zip = new JSZip();
-													value.forEach((item) => {
-														const data = csvData
-															.filter((data) => data.NUMERO_ORDEN === item)
-															.map((data) => Object.values(data).join("\t"))
-															.join("\n");
-														zip.file(`${item}_${localDate}.txt`);
-													});
-													zip
-														.generateAsync({ type: "blob" })
-														.then((content) => {
-															saveAs(content, `reporte_${localDate}.zip`);
-														});
-												} else {
+											const headers = Object.keys(csvData[0]).join("\t");
+											const zip = new JSZip();
+
+											if (value.length >= 2) {
+												value.forEach((item) => {
 													const data = csvData
-														.filter((data) => data.NUMERO_ORDEN === value[0])
+														.filter((data) => data.NUMERO_ORDEN === item)
 														.map((data) => Object.values(data).join("\t"))
 														.join("\n");
-													const blob = new Blob([headers + "\n" + data], {
-														type: "text/plain;charset=utf-8",
-													});
-													saveAs(blob, `${value[0]}_${localDate}.txt`);
-												}
+													zip.file(`${item}.txt`, `${headers}\n${data}`);
+												});
+												zip.generateAsync({ type: "blob" }).then((content) => {
+													saveAs(content, `reporte_${localDate}.zip`);
+												});
+											} else {
+												const data = csvData
+													.filter((data) => data.NUMERO_ORDEN === value[0])
+													.map((data) => Object.values(data).join("\t"))
+													.join("\n");
+												const blob = new Blob([headers + "\n" + data], {
+													type: "text/plain;charset=utf-8",
+												});
+												saveAs(blob, `${value[0]}_${localDate}.txt`);
 											}
 										}}
 									>
