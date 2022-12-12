@@ -15,6 +15,7 @@ export default function Filedrop({ subChildrens }) {
 		Papa.parse(file, {
 			header: true,
 			dynamicTyping: false,
+			encoding: "ISO-8859-1",
 			complete: (results) => {
 				setCsvData(results.data);
 			},

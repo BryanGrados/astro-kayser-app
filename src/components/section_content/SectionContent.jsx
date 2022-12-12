@@ -110,12 +110,18 @@ export default function SectionContent() {
 														.map((data) => Object.values(data).join("\t"))
 														.join("\n");
 													const blob = new Blob([headers + "\n" + data], {
-														type: "text/plain;charset=utf-8",
+														type: "text/plain;charset=ANSI",
 													});
-													zip.file(`reporte_${item}.txt`, blob);
+
+													const utf8 = new TextDecoder("utf-8").decode(blob);
+
+													zip.file(`reporte_${item}.txt`, utf8);
 												});
 												zip.generateAsync({ type: "blob" }).then((content) => {
-													saveAs(content, `reporte_${localDate}.zip`);
+													saveAs(
+														content,
+														`reporte_${formatDate(localDate)}.zip`,
+													);
 												});
 											} else {
 												const data = csvData
@@ -123,7 +129,7 @@ export default function SectionContent() {
 													.map((data) => Object.values(data).join("\t"))
 													.join("\n");
 												const blob = new Blob([headers + "\n" + data], {
-													type: "text/plain;charset=utf-8",
+													type: "text/plain;charset=ANSI",
 												});
 												saveAs(blob, `${value[0]}_${localDate}.txt`);
 											}
@@ -159,7 +165,7 @@ export default function SectionContent() {
 														.map((data) => Object.values(data).join("\t"))
 														.join("\n");
 													const blob = new Blob([headers + "\n" + data], {
-														type: "text/plain;charset=utf-8",
+														type: "text/plain;charset=ANSI",
 													});
 													zip.file(
 														`ROC_3215_${formatDate(localDate)}_${item}.txt`,
