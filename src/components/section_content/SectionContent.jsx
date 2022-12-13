@@ -214,7 +214,7 @@ export default function SectionContent() {
 				</motion.div>
 				<motion.div variants={subChildrens} className="w-full h-full py-2">
 					<DataTable
-						data={data}
+						data={csvData}
 						searchData={searchData}
 						currentPage={currentPage}
 						productsPerPage={productsPerPage}
