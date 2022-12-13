@@ -116,6 +116,4 @@ export const headers = [
 	"TOTAL_ORDEN",
 	"FECHA_ENTREGA",
 	"PEDIDO_SAP",
-	"CODIGO_VENDEDOR",
-	"COMISION_VENDEDOR",
 ];

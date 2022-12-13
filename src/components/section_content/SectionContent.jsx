@@ -3,14 +3,14 @@ import { SearchDataContext } from "../../utils/SearchDataContext";
 import Texts from "../reusables/Texts";
 import DataTable from "./DataTable";
 import { childrens, parent, subChildrens } from "./animations";
+import { headers as head } from "./data";
 import { Modal, MultiSelect, Pagination } from "@mantine/core";
-import { saveAs } from "file-saver";
-import { AnimatePresence, motion } from "framer-motion";
-import JSZip, { forEach } from "jszip";
-import React, { useContext, useState } from "react";
 import { showNotification } from "@mantine/notifications";
 import { IconFaceIdError } from "@tabler/icons";
-import { tData, headers as head } from "./data";
+import { saveAs } from "file-saver";
+import { AnimatePresence, motion } from "framer-motion";
+import JSZip from "jszip";
+import React, { useContext, useState } from "react";
 
 export default function SectionContent() {
 	const { csvData, setCsvData } = useContext(CsvDataContext);
@@ -112,33 +112,25 @@ export default function SectionContent() {
 													const data = csvData
 														.filter((data) => data.NUMERO_ORDEN === item)
 														.map((data) => Object.values(data).join("\t"))
-														.join("\n");
-													const blob = new Blob([headers + "\n" + data], {
-														type: "text/plain;charset=ANSI",
+														.join("\r\n");
+													const blob = new Blob([`${headers}\r\n${data}\r\n`], {
+														type: "text/plain;charset=windows-1252",
 													});
-													zip.file(
-														`ROC_3215_${formatDate(localDate)}_${item}.txt`,
-														blob,
-													);
+
+													zip.file(`ROC_3215_20221212_${item}.txt`, blob);
 												});
 												zip.generateAsync({ type: "blob" }).then((content) => {
-													saveAs(
-														content,
-														`reporte_${formatDate(localDate)}.zip`,
-													);
+													saveAs(content, "reporte_20221212.zip");
 												});
 											} else {
 												const data = csvData
 													.filter((data) => data.NUMERO_ORDEN === value[0])
 													.map((data) => Object.values(data).join("\t"))
-													.join("\n");
-												const blob = new Blob([headers + "\n" + data], {
-													type: "text/plain;charset=ANSI",
+													.join("\r\n");
+												const blob = new Blob([`${headers}\r\n${data}\r\n`], {
+													type: "text/plain;charset=windows-1252",
 												});
-												saveAs(
-													blob,
-													`ROC_3215_${formatDate(localDate)}_${value[0]}.txt`,
-												);
+												saveAs(blob, `ROC_3215_20221212_${value[0]}.txt`);
 											}
 										}}
 									>
@@ -170,21 +162,17 @@ export default function SectionContent() {
 													const data = csvData
 														.filter((data) => data.NUMERO_ORDEN === item)
 														.map((data) => Object.values(data).join("\t"))
-														.join("\n");
-													const blob = new Blob([headers + "\n" + data], {
-														type: "text/plain;charset=ANSI",
+														.join("\r\n");
+
+													const blob = new Blob([`${headers}\r\n${data}\r\n`], {
+														type: "text/plain;charset=windows-1252",
 													});
-													zip.file(
-														`ROC_3215_${formatDate(localDate)}_${item}.txt`,
-														blob,
-													);
+
+													zip.file(`ROC_3215_20221212_${item}.txt`, blob);
 												});
 
 												zip.generateAsync({ type: "blob" }).then((content) => {
-													saveAs(
-														content,
-														`reporte_${formatDate(localDate)}.zip`,
-													);
+													saveAs(content, "reporte_20221212.zip");
 												});
 											}
 										}}
@@ -226,7 +214,7 @@ export default function SectionContent() {
 				</motion.div>
 				<motion.div variants={subChildrens} className="w-full h-full py-2">
 					<DataTable
-						data={csvData}
+						data={data}
 						searchData={searchData}
 						currentPage={currentPage}
 						productsPerPage={productsPerPage}

@@ -13,8 +13,8 @@ const main = {
 	visible: {
 		opacity: 1,
 		transition: {
-			delayChildren: 0.5, // this will set a delay before the children start animating
-			staggerChildren: 0.3, // this will set the time inbetween children animation
+			delayChildren: 0.5,
+			staggerChildren: 0.3,
 		},
 	},
 };
@@ -29,7 +29,6 @@ const childrens = {
 			type: "spring",
 			stiffness: 100,
 			mass: 0.3,
-			// remove delay: 0.3,
 		},
 	},
 };

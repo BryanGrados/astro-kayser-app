@@ -1,3 +1,4 @@
+import { CsvDataContext } from "../../utils/DataTableContext";
 import { Group, Text } from "@mantine/core";
 import { Dropzone } from "@mantine/dropzone";
 import { showNotification, updateNotification } from "@mantine/notifications";
@@ -5,8 +6,7 @@ import { IconCheck } from "@tabler/icons";
 import { motion } from "framer-motion";
 import { DirectSend, DocumentUpload, FolderCross } from "iconsax-react";
 import Papa from "papaparse";
-import { useCallback, useContext, useState } from "react";
-import { CsvDataContext } from "../../utils/DataTableContext";
+import { useCallback, useContext } from "react";
 
 export default function Filedrop({ subChildrens }) {
 	const { csvData, setCsvData } = useContext(CsvDataContext);
@@ -15,7 +15,7 @@ export default function Filedrop({ subChildrens }) {
 		Papa.parse(file, {
 			header: true,
 			dynamicTyping: false,
-			encoding: "ISO-8859-1",
+			encoding: "Windows-1252",
 			complete: (results) => {
 				setCsvData(results.data);
 			},
