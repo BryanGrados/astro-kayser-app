@@ -10,6 +10,7 @@ import JSZip, { forEach } from "jszip";
 import React, { useContext, useState } from "react";
 import { showNotification } from "@mantine/notifications";
 import { IconFaceIdError } from "@tabler/icons";
+import { tData, headers as head } from "./data";
 
 export default function SectionContent() {
 	const { csvData, setCsvData } = useContext(CsvDataContext);
@@ -100,7 +101,10 @@ export default function SectionContent() {
 										whileTap={{ scale: 0.9 }}
 										className="px-4 py-2 text-white bg-[#374aee] rounded-md shadow-md"
 										onClick={() => {
-											const headers = Object.keys(csvData[0]).join("\t");
+											const headers = head.map((item) => item).join("\t");
+
+											console.log(headers);
+
 											const zip = new JSZip();
 
 											if (value.length >= 2) {
@@ -112,10 +116,10 @@ export default function SectionContent() {
 													const blob = new Blob([headers + "\n" + data], {
 														type: "text/plain;charset=ANSI",
 													});
-
-													const utf8 = new TextDecoder("utf-8").decode(blob);
-
-													zip.file(`reporte_${item}.txt`, utf8);
+													zip.file(
+														`ROC_3215_${formatDate(localDate)}_${item}.txt`,
+														blob,
+													);
 												});
 												zip.generateAsync({ type: "blob" }).then((content) => {
 													saveAs(
@@ -131,7 +135,10 @@ export default function SectionContent() {
 												const blob = new Blob([headers + "\n" + data], {
 													type: "text/plain;charset=ANSI",
 												});
-												saveAs(blob, `${value[0]}_${localDate}.txt`);
+												saveAs(
+													blob,
+													`ROC_3215_${formatDate(localDate)}_${value[0]}.txt`,
+												);
 											}
 										}}
 									>
@@ -155,7 +162,7 @@ export default function SectionContent() {
 												});
 											} else {
 												const zip = new JSZip();
-												const headers = Object.keys(csvData[0]).join("\t");
+												const headers = head.map((item) => item).join("\t");
 
 												const values = [...data].map((item) => item.value);
 

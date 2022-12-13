@@ -1,6 +1,6 @@
 import { CsvDataContext } from "../../utils/DataTableContext";
 import { rowAnimation, tableAnimation } from "./animations";
-import { tData } from "./data";
+import { tData, headers } from "./data";
 import { useStyles } from "./styles";
 import {
 	Group,
@@ -28,6 +28,9 @@ export default function DataTable({
 	const { csvData, setCsvData } = useContext(CsvDataContext);
 	const { colorScheme } = useMantineColorScheme();
 	const dark = colorScheme === "dark";
+
+	console.log(tData.length);
+	console.log(headers.length);
 
 	const filteredData = data.filter((item) => {
 		if (searchData === "") {
