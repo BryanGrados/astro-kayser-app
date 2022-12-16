@@ -117,10 +117,16 @@ export default function SectionContent() {
 														type: "text/plain;charset=windows-1252",
 													});
 
-													zip.file(`ROC_3215_20221212_${item}.txt`, blob);
+													zip.file(
+														`ROC_3215_${formatDate(localDate)}_${item}.txt`,
+														blob,
+													);
 												});
 												zip.generateAsync({ type: "blob" }).then((content) => {
-													saveAs(content, "reporte_20221212.zip");
+													saveAs(
+														content,
+														`ROC_3215_${formatDate(localDate)}.zip`,
+													);
 												});
 											} else {
 												const data = csvData
@@ -130,7 +136,10 @@ export default function SectionContent() {
 												const blob = new Blob([`${headers}\r\n${data}\r\n`], {
 													type: "text/plain;charset=windows-1252",
 												});
-												saveAs(blob, `ROC_3215_20221212_${value[0]}.txt`);
+												saveAs(
+													blob,
+													`ROC_3215_${formatDate(localDate)}_${value[0]}.txt`,
+												);
 											}
 										}}
 									>
@@ -154,7 +163,9 @@ export default function SectionContent() {
 												});
 											} else {
 												const zip = new JSZip();
-												const headers = head.map((item) => item).join("\t");
+												const headers = head
+													.map((item) => item)
+													.join("\t + \r\n");
 
 												const values = [...data].map((item) => item.value);
 
@@ -162,17 +173,23 @@ export default function SectionContent() {
 													const data = csvData
 														.filter((data) => data.NUMERO_ORDEN === item)
 														.map((data) => Object.values(data).join("\t"))
-														.join("\r\n");
+														.join("\r\n + \r\n");
 
 													const blob = new Blob([`${headers}\r\n${data}\r\n`], {
 														type: "text/plain;charset=windows-1252",
 													});
 
-													zip.file(`ROC_3215_20221212_${item}.txt`, blob);
+													zip.file(
+														`ROC_3215_${formatDate(localDate)}_${item}.txt`,
+														blob,
+													);
 												});
 
 												zip.generateAsync({ type: "blob" }).then((content) => {
-													saveAs(content, "reporte_20221212.zip");
+													saveAs(
+														content,
+														`reporte_${formatDate(localDate)}.zip`,
+													);
 												});
 											}
 										}}
