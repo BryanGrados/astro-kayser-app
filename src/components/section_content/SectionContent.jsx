@@ -163,9 +163,7 @@ export default function SectionContent() {
 												});
 											} else {
 												const zip = new JSZip();
-												const headers = head
-													.map((item) => item)
-													.join("\t + \r\n");
+												const headers = head.map((item) => item).join("\t\r\n");
 
 												const values = [...data].map((item) => item.value);
 
@@ -173,7 +171,7 @@ export default function SectionContent() {
 													const data = csvData
 														.filter((data) => data.NUMERO_ORDEN === item)
 														.map((data) => Object.values(data).join("\t"))
-														.join("\r\n + \r\n");
+														.join("\r\n\r\n");
 
 													const blob = new Blob([`${headers}\r\n${data}\r\n`], {
 														type: "text/plain;charset=windows-1252",
