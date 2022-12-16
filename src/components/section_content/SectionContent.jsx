@@ -173,9 +173,12 @@ export default function SectionContent() {
 														.map((data) => Object.values(data).join("\t"))
 														.join("\r\n\r\n");
 
-													const blob = new Blob([`${headers}\r\n${data}\r\n`], {
-														type: "text/plain;charset=windows-1252",
-													});
+													const blob = new Blob(
+														[`${headers}\r\n\r\n${data}\r\n`],
+														{
+															type: "text/plain;charset=windows-1252",
+														},
+													);
 
 													zip.file(
 														`ROC_3215_${formatDate(localDate)}_${item}.txt`,
