@@ -170,7 +170,7 @@ export default function SectionContent() {
 												values.forEach((item) => {
 													const data = csvData
 														.filter((data) => data.NUMERO_ORDEN === item)
-														.map((data) => Object.values(data).join("\t\r\n"))
+														.map((data) => Object.values(data).join("\t"))
 														.join("\r\n\r\n");
 
 													const blob = new Blob([`${headers}\r\n${data}\r\n`], {
