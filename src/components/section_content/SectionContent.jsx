@@ -163,7 +163,7 @@ export default function SectionContent() {
 												});
 											} else {
 												const zip = new JSZip();
-												const headers = head.map((item) => item).join("\t\r\n");
+												const headers = head.map((item) => item).join("\t");
 
 												const values = [...data].map((item) => item.value);
 
