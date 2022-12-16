@@ -43,6 +43,16 @@ export default function SectionContent() {
 
 	const data = formatData(csvData);
 
+	const uniqueOrders = [...new Set(csvData.map((item) => item.NUMERO_ORDEN))];
+
+	const totalRecords = () => {
+		if (uniqueOrders.length === 0) {
+			return 0;
+		} else {
+			return uniqueOrders.length - 1;
+		}
+	};
+
 	return (
 		<motion.section
 			variants={parent}
@@ -102,8 +112,6 @@ export default function SectionContent() {
 										className="px-4 py-2 text-white bg-[#374aee] rounded-md shadow-md"
 										onClick={() => {
 											const headers = head.map((item) => item).join("\t");
-
-											console.log(headers);
 
 											const zip = new JSZip();
 
@@ -186,7 +194,7 @@ export default function SectionContent() {
 												zip.generateAsync({ type: "blob" }).then((content) => {
 													saveAs(
 														content,
-														`reporte_${formatDate(localDate)}.zip`,
+														`ROC_3215_${formatDate(localDate)}.zip`,
 													);
 												});
 											}
@@ -201,6 +209,13 @@ export default function SectionContent() {
 							</motion.div>
 						</AnimatePresence>
 					</Modal>
+					<motion.p>
+						{/* cuenta registros unicos totales */}
+						<Texts
+							content={`Total de registros: ${totalRecords()}`}
+							{...{ size: "xl", weight: "bold" }}
+						/>
+					</motion.p>
 					<motion.button
 						whileHover={{ scale: 1.1 }}
 						whileTap={{ scale: 0.9 }}
