@@ -146,7 +146,7 @@ export default function SectionContent() {
 												});
 												saveAs(
 													blob,
-													`ROC_3215_${formatDate(localDate)}_${value[0]}.txt`,
+													`reportes_${formatDate(localDate)}_${value[0]}.txt`,
 												);
 											}
 										}}
@@ -194,7 +194,7 @@ export default function SectionContent() {
 												zip.generateAsync({ type: "blob" }).then((content) => {
 													saveAs(
 														content,
-														`ROC_3215_${formatDate(localDate)}.zip`,
+														`reportes_${formatDate(localDate)}.zip`,
 													);
 												});
 											}
